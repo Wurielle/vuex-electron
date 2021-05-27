@@ -1,6 +1,6 @@
 {
-  "name": "vuex-electron",
-  "version": "1.0.3",
+  "name": "@wurielle/vuex-electron",
+  "version": "1.1.0",
   "description": "Vuex Electron",
   "keywords": [
     "vue",
@@ -8,8 +8,8 @@
     "electron"
   ],
   "main": "./dist/index.js",
-  "repository": "https://github.com/vue-electron/vuex-electron",
-  "homepage": "https://github.com/vue-electron/vuex-electron",
+  "repository": "https://github.com/wurielle/vuex-electron",
+  "homepage": "https://github.com/wurielle/vuex-electron",
   "bugs": "https://github.com/vue-electron/vuex-electron/issues",
   "author": "Andrew Emelianenko <emelianenko.web@gmail.com>",
   "license": "MIT",
@@ -57,5 +57,8 @@
   "dependencies": {
     "deepmerge": "^2.1.1",
     "electron-store": "^2.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   }
 }
