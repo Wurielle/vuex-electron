@@ -17,7 +17,7 @@ class SharedMutations {
   }
 
   connect(payload) {
-    this.options.ipcRenderer.send(IPC_EVENT_CONNECT, payload)
+    this.options.ipcRenderer.send(IPC_EVENT_CONNECT, JSON.stringify(payload))
   }
 
   onConnect(handler) {
@@ -25,7 +25,7 @@ class SharedMutations {
   }
 
   notifyMain(payload) {
-    this.options.ipcRenderer.send(IPC_EVENT_NOTIFY_MAIN, payload)
+    this.options.ipcRenderer.send(IPC_EVENT_NOTIFY_MAIN, JSON.stringify(payload))
   }
 
   onNotifyMain(handler) {
@@ -34,7 +34,7 @@ class SharedMutations {
 
   notifyRenderers(connections, payload) {
     Object.keys(connections).forEach((processId) => {
-      connections[processId].send(IPC_EVENT_NOTIFY_RENDERERS, payload)
+      connections[processId].send(IPC_EVENT_NOTIFY_RENDERERS, JSON.stringify(payload))
     })
   }
 
@@ -62,7 +62,7 @@ class SharedMutations {
 
     // Subscribe on changes from main process and apply them
     this.onNotifyRenderers((event, { type, payload }) => {
-      this.store.originalCommit(type, payload)
+      this.store.originalCommit(type, JSON.parse(payload))
     })
   }
 
@@ -84,7 +84,7 @@ class SharedMutations {
 
     // Subscribe on changes from renderer processes
     this.onNotifyMain((event, { type, payload }) => {
-      this.store.dispatch(type, payload)
+      this.store.dispatch(type, JSON.parse(payload))
     })
 
     // Subscribe on changes from Vuex store
