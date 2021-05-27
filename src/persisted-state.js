@@ -20,7 +20,7 @@ class PersistedState {
   }
 
   createStorage() {
-    return new Store({ name: this.options.storageName || STORAGE_NAME })
+    return new Store({ name: this.options.storageName || this.options.storeName || STORAGE_NAME })
   }
 
   getState() {
