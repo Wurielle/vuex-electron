@@ -1,9 +1,5 @@
 import { ipcMain, ipcRenderer } from "electron"
 
-const IPC_EVENT_CONNECT = "vuex-mutations-connect"
-const IPC_EVENT_NOTIFY_MAIN = "vuex-mutations-notify-main"
-const IPC_EVENT_NOTIFY_RENDERERS = "vuex-mutations-notify-renderers"
-
 class SharedMutations {
   constructor(options, store) {
     this.options = options
@@ -14,32 +10,38 @@ class SharedMutations {
     if (!this.options.type) this.options.type = process.type === "renderer" ? "renderer" : "main"
     if (!this.options.ipcMain) this.options.ipcMain = ipcMain
     if (!this.options.ipcRenderer) this.options.ipcRenderer = ipcRenderer
+    
+    if (!this.options.storeName) this.options.storeName = 'default';
+    
+    this.IPC_EVENT_CONNECT = "vuex-mutations-connect" + ":" + this.options.storeName;
+    this.IPC_EVENT_NOTIFY_MAIN = "vuex-mutations-notify-main" + ":" + this.options.storeName;
+    this.IPC_EVENT_NOTIFY_RENDERERS = "vuex-mutations-notify-renderers" + ":" + this.options.storeName;
   }
 
   connect(payload) {
-    this.options.ipcRenderer.send(IPC_EVENT_CONNECT, JSON.stringify(payload))
+    this.options.ipcRenderer.send(this.IPC_EVENT_CONNECT, JSON.stringify(payload))
   }
 
   onConnect(handler) {
-    this.options.ipcMain.on(IPC_EVENT_CONNECT, handler)
+    this.options.ipcMain.on(this.IPC_EVENT_CONNECT, handler)
   }
 
   notifyMain(payload) {
-    this.options.ipcRenderer.send(IPC_EVENT_NOTIFY_MAIN, JSON.stringify(payload))
+    this.options.ipcRenderer.send(this.IPC_EVENT_NOTIFY_MAIN, JSON.stringify(payload))
   }
 
   onNotifyMain(handler) {
-    this.options.ipcMain.on(IPC_EVENT_NOTIFY_MAIN, handler)
+    this.options.ipcMain.on(this.IPC_EVENT_NOTIFY_MAIN, handler)
   }
 
   notifyRenderers(connections, payload) {
     Object.keys(connections).forEach((processId) => {
-      connections[processId].send(IPC_EVENT_NOTIFY_RENDERERS, JSON.stringify(payload))
+      connections[processId].send(this.IPC_EVENT_NOTIFY_RENDERERS, JSON.stringify(payload))
     })
   }
 
   onNotifyRenderers(handler) {
-    this.options.ipcRenderer.on(IPC_EVENT_NOTIFY_RENDERERS, handler)
+    this.options.ipcRenderer.on(this.IPC_EVENT_NOTIFY_RENDERERS, handler)
   }
 
   rendererProcessLogic() {
