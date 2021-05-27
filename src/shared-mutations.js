@@ -10,12 +10,10 @@ class SharedMutations {
     if (!this.options.type) this.options.type = process.type === "renderer" ? "renderer" : "main"
     if (!this.options.ipcMain) this.options.ipcMain = ipcMain
     if (!this.options.ipcRenderer) this.options.ipcRenderer = ipcRenderer
-    
-    if (!this.options.storeName) this.options.storeName = 'default';
-    
-    this.IPC_EVENT_CONNECT = "vuex-mutations-connect" + ":" + this.options.storeName;
-    this.IPC_EVENT_NOTIFY_MAIN = "vuex-mutations-notify-main" + ":" + this.options.storeName;
-    this.IPC_EVENT_NOTIFY_RENDERERS = "vuex-mutations-notify-renderers" + ":" + this.options.storeName;
+    if (!this.options.storeName) this.options.storeName = "default"
+    this.IPC_EVENT_CONNECT = "vuex-mutations-connect" + ":" + this.options.storeName
+    this.IPC_EVENT_NOTIFY_MAIN = "vuex-mutations-notify-main" + ":" + this.options.storeName
+    this.IPC_EVENT_NOTIFY_RENDERERS = "vuex-mutations-notify-renderers" + ":" + this.options.storeName
   }
 
   connect(payload) {
